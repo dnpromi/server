@@ -2,8 +2,10 @@ package com.dp.cointracker3;
 
 import com.dp.cointracker3.DB.UserAddressDAL;
 import com.dp.cointracker3.model.UserAddress;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import com.sun.jdi.request.InvalidRequestStateException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -17,7 +19,7 @@ public class GetAddress {
 
     // Ideally singleton instance is injected
     private UserAddressDAL userAddressDAL = new UserAddressDAL();
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     @GET
     @Produces("text/plain")
@@ -34,6 +36,7 @@ public class GetAddress {
         return address.getAddress();
     }
 
+    @VisibleForTesting
     public void setUserAddressDAL(UserAddressDAL userAddressDAL) {
         this.userAddressDAL = userAddressDAL;
     }

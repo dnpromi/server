@@ -3,12 +3,14 @@ package com.dp.cointracker3;
 import com.dp.cointracker3.DB.UserAddressDAL;
 import com.dp.cointracker3.model.UserAddress;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.google.common.annotations.VisibleForTesting;
 import com.sun.jdi.request.InvalidRequestStateException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -23,14 +25,14 @@ public class GetAddresses {
 
     // Ideally singleton instance is injected
     private UserAddressDAL userAddressDAL = new UserAddressDAL();
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     @GET
     @Produces("text/plain")
     public String getAddresses(@QueryParam("user") String user) {
         // validation
         if(user == null || user.isBlank()) {
-            throw new InvalidRequestStateException("Invalid request : user needs to be valid.");
+            throw new IllegalArgumentException("Invalid request : user needs to be valid.");
         }
 
         List<UserAddress> addresses = userAddressDAL.getAllAddresses(user);
@@ -39,5 +41,10 @@ public class GetAddresses {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @VisibleForTesting
+    public void setUserAddressDAL(UserAddressDAL userAddressDAL) {
+        this.userAddressDAL = userAddressDAL;
     }
 }

@@ -1,6 +1,7 @@
 package com.dp.cointracker3;
 
 import com.dp.cointracker3.DB.UserAddressDAL;
+import com.google.common.annotations.VisibleForTesting;
 import com.sun.jdi.request.InvalidRequestStateException;
 import jakarta.ws.rs.*;
 
@@ -27,6 +28,7 @@ public class AddAddress {
         return userAddressDAL.addAddress(user, nicknameNew, address);
     }
 
+    @VisibleForTesting
     public void setUserAddressDAL(UserAddressDAL userAddressDAL) {
         this.userAddressDAL = userAddressDAL;
     }
