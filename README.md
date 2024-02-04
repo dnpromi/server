@@ -2,7 +2,7 @@
 
 
 
-###Prerequisites
+### Prerequisites
 1. Install tomcat 10.1.18
 2. Update the path to the sqllite DB file.
 
